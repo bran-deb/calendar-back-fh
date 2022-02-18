@@ -9,6 +9,10 @@ const app = express()
 //directorio publico
 app.use(express.static('public'))
 
+//lectura y parseo del body para
+//prosesa las peticiones en formato json y extrae su contenido
+app.use(express.json());
+
 //rutas
 app.use('/api/auth', require('./routes/auth'))
 //TODO: CRUD: Eventos

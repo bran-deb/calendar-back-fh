@@ -23,7 +23,8 @@ router.post(
 router.post(
     '/',
     [
-        check('email', 'El email es obligatorio').isEmail(),
+        check('email', 'El email es obligatorio').not().isEmpty(),
+        check('email', 'email incorrecto').isEmail(),
         check('password', 'El password debe de tener 6 caracteres').isLength({ min: 6 }),
         validarCampos
     ],

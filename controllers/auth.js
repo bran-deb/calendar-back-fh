@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/Usuario')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { generarJWT } = require('../helpers/jwt');
 
 
 const crearUsuario = async (req, res = response) => {
@@ -23,11 +24,14 @@ const crearUsuario = async (req, res = response) => {
             //encrita el pasoword (genera un hash)
             usuario.password = bcrypt.hashSync(password, salt)
             await usuario.save()                    //guarda en la DB
+            //generar JWT
+            const token = await generarJWT(usuario.id, usuario.name)
 
             res.status(201).json({
                 ok: true,
                 uid: usuario.id,
-                name: usuario.name
+                name: usuario.name,
+                token
             })
         }
 
@@ -62,10 +66,13 @@ const loginUsuario = async (req, res = response) => {
             })
         } else {
             //generar JWT
+            const token = await generarJWT(usuario.id, usuario.name)
+
             res.status(200).json({
                 ok: true,
                 uid: usuario.id,
-                name: usuario.name
+                name: usuario.name,
+                token
             })
         }
 
@@ -78,10 +85,15 @@ const loginUsuario = async (req, res = response) => {
     }
 }
 
-const revalidarToken = (req, res = response) => {
-    res.json({
+const revalidarToken = async (req, res = response) => {
+    const { uid, name } = req
+
+    //no se necesita verificar si existe el token por que el middleware ya verifico
+    //generar JWT
+    const token = await generarJWT(uid, name)
+    res.status(201).json({
         ok: true,
-        msg: 'renew'
+        token
     })
 }
 

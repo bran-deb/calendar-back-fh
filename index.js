@@ -23,6 +23,7 @@ app.use(express.json());
 
 //rutas
 app.use('/api/auth', require('./routes/auth'))
+app.use('/api/events', require('./routes/events'))
 //TODO: CRUD: Eventos
 
 

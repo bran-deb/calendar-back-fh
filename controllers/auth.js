@@ -85,10 +85,15 @@ const loginUsuario = async (req, res = response) => {
     }
 }
 
-const revalidarToken = (req, res = response) => {
-    res.json({
+const revalidarToken = async (req, res = response) => {
+    const { uid, name } = req
+
+    //no se necesita verificar si existe el token por que el middleware ya verifico
+    //generar JWT
+    const token = await generarJWT(uid, name)
+    res.status(201).json({
         ok: true,
-        msg: 'renew'
+        token
     })
 }
 

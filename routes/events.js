@@ -30,7 +30,17 @@ router.post(
     crearEvento
 )
 
-router.put('/:id', actualizarEvento)
+router.put(
+    '/:id', [
+    check('title', 'El titulo es obligatorio').not().isEmpty(),
+    check('start', 'Fecha de inicio obligatorio').not().isEmpty(),
+    check('start', 'Fecha de inicio no valida').custom(isDate),
+    check('end', 'Fecha final obligatorio').not().isEmpty(),
+    check('end', 'Fecha final no vallida').custom(isDate),
+    validarCampos
+],
+    actualizarEvento
+)
 router.delete('/:id', EliminarEvento)
 
 module.exports = router
